@@ -32,6 +32,9 @@ local MainSection = MainTab:CreateSection("Main")
 local ScriptHubsTab = Window:CreateTab("ScriptHubs", nil) -- Title, Image
 local ScriptHubsSection = ScriptHubsTab:CreateSection("ScriptHubs")
 
+local FunTab = Window:CreateTab("ScriptHubs", nil) -- Title, Image
+local FunSection = FunTab:CreateSection("Fun")
+
 local Button = MainTab:CreateButton({
    Name = "Aimbot",
    Callback = function()
@@ -604,18 +607,9 @@ until nil
    end,
 })
 
-local Button = MainTab:CreateButton({
-   Name = "Clip",
+local Button = Tab:CreateButton({
+   Name = "Button Example",
    Callback = function()
-   --Undoes NoClip command if active
-
-local Player = game.Players.LocalPlayer
-local NoClipScript = script.Parent:FindFirstChild("NoClip")
-if NoClipScript then
-	NoClipScript:destroy()
-end
-
-wait()
-script:destroy()
+   -- The function that takes place when the button is pressed
    end,
 })
