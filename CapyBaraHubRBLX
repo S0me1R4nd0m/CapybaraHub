@@ -18,7 +18,7 @@ local Window = Rayfield:CreateWindow({
    KeySettings = {
       Title = "Kill Noob Simulator Key",
       Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided",
+      Note = "Join Discord",
       FileName = "Capybara Hub Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
       GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
@@ -48,28 +48,13 @@ _G.TeamCheck = false -- If set to true then the script would only lock your aim 
 _G.AimPart = "Head" -- Where the aimbot script would lock at.
 _G.Sensitivity = 0 -- How many seconds it takes for the aimbot script to officially lock onto the target's aimpart.
 
-_G.CircleSides = 64 -- How many sides the FOV circle would have.
-_G.CircleColor = Color3.fromRGB(255, 255, 255) -- (RGB) Color that the FOV circle would appear as.
-_G.CircleTransparency = 0.7 -- Transparency of the circle.
-_G.CircleRadius = 80 -- The radius of the circle / FOV.
-_G.CircleFilled = false -- Determines whether or not the circle is filled.
-_G.CircleVisible = true -- Determines whether or not the circle is visible.
-_G.CircleThickness = 0 -- The thickness of the circle.
-
-local FOVCircle = Drawing.new("Circle")
-FOVCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
-FOVCircle.Radius = _G.CircleRadius
-FOVCircle.Filled = _G.CircleFilled
-FOVCircle.Color = _G.CircleColor
-FOVCircle.Visible = _G.CircleVisible
-FOVCircle.Radius = _G.CircleRadius
-FOVCircle.Transparency = _G.CircleTransparency
-FOVCircle.NumSides = _G.CircleSides
-FOVCircle.Thickness = _G.CircleThickness
-
 local function GetClosestPlayer()
-	local MaximumDistance = _G.CircleRadius
+	local MaximumDistance = math.huge
 	local Target = nil
+  
+  	coroutine.wrap(function()
+    		wait(20); MaximumDistance = math.huge -- Reset the MaximumDistance so that the Aimbot doesn't remember it as a very small variable and stop capturing players...
+  	end)()
 
 	for _, v in next, Players:GetPlayers() do
 		if v.Name ~= LocalPlayer.Name then
@@ -83,6 +68,7 @@ local function GetClosestPlayer()
 								
 								if VectorDistance < MaximumDistance then
 									Target = v
+                  							MaximumDistance = VectorDistance
 								end
 							end
 						end
@@ -97,6 +83,7 @@ local function GetClosestPlayer()
 							
 							if VectorDistance < MaximumDistance then
 								Target = v
+               							MaximumDistance = VectorDistance
 							end
 						end
 					end
@@ -121,23 +108,12 @@ UserInputService.InputEnded:Connect(function(Input)
 end)
 
 RunService.RenderStepped:Connect(function()
-    FOVCircle.Position = Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
-    FOVCircle.Radius = _G.CircleRadius
-    FOVCircle.Filled = _G.CircleFilled
-    FOVCircle.Color = _G.CircleColor
-    FOVCircle.Visible = _G.CircleVisible
-    FOVCircle.Radius = _G.CircleRadius
-    FOVCircle.Transparency = _G.CircleTransparency
-    FOVCircle.NumSides = _G.CircleSides
-    FOVCircle.Thickness = _G.CircleThickness
-
     if Holding == true and _G.AimbotEnabled == true then
         TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, GetClosestPlayer().Character[_G.AimPart].Position)}):Play()
     end
 end)
    end,
 })
-
 
 local Button = MainTab:CreateButton({
    Name = "Infinite Jump Toggle",
@@ -577,5 +553,81 @@ else
 		game.StarterGui:SetCore("SendNotification", {Title="WeAreDevs.net"; Text="Click teleport disabled"; Duration=5;})
 	end
 end
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "NoClip",
+   Callback = function()
+   --Credit to Kohltastrophe for most of this
+
+local Player = game.Players.LocalPlayer
+local Char = Player.Character
+while not Char do wait()
+	Char = Player.Character
+end
+local Humanoid = Char:WaitForChild("Humanoid")
+local Root = Char:FindFirstChild("HumanoidRootPart")
+while not Root do wait()
+	Root = Char:FindFirstChild("HumanoidRootPart")
+end
+local Mouse = Player:GetMouse()
+local Cam = game.Workspace.CurrentCamera
+
+local dir = {w = 0, s = 0, a = 0, d = 0}
+local spd = 2
+Mouse.KeyDown:connect(function(key)
+	if key:lower() == "w" then
+		dir.w = 1
+	elseif key:lower() == "s" then
+		dir.s = 1
+	elseif key:lower() == "a" then
+		dir.a = 1
+	elseif key:lower() == "d" then
+		dir.d = 1
+	elseif key:lower() == "q" then
+		spd = spd + 1
+	elseif key:lower() == "e" then
+		spd = spd - 1
+	end
+end)
+Mouse.KeyUp:connect(function(key)
+	if key:lower() == "w" then
+		dir.w = 0
+	elseif key:lower() == "s" then
+		dir.s = 0
+	elseif key:lower() == "a" then
+		dir.a = 0
+	elseif key:lower() == "d" then
+		dir.d = 0
+	end
+end)
+Root.Anchored = true
+Humanoid.PlatformStand = true
+Humanoid.Changed:connect(function()
+	Humanoid.PlatformStand = true
+end)
+repeat
+	wait(1/44)
+	Root.CFrame = CFrame.new(Root.Position, Cam.CoordinateFrame.p) 
+		* CFrame.Angles(0,math.rad(180),0)
+		* CFrame.new((dir.d-dir.a)*spd,0,(dir.s-dir.w)*spd)
+until nil
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Clip",
+   Callback = function()
+   --Undoes NoClip command if active
+
+local Player = game.Players.LocalPlayer
+local NoClipScript = script.Parent:FindFirstChild("NoClip")
+if NoClipScript then
+	NoClipScript:destroy()
+end
+
+wait()
+script:destroy()
    end,
 })
