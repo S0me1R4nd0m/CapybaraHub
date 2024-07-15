@@ -35,7 +35,7 @@ local ScriptHubsSection = ScriptHubsTab:CreateSection("ScriptHubs")
 local Button = MainTab:CreateButton({
    Name = "Aimbot",
    Callback = function()
-   local Camera = workspace.CurrentCamera
+  local Camera = workspace.CurrentCamera
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -110,18 +110,6 @@ end)
 RunService.RenderStepped:Connect(function()
     if Holding == true and _G.AimbotEnabled == true then
         TweenService:Create(Camera, TweenInfo.new(_G.Sensitivity, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(Camera.CFrame.Position, GetClosestPlayer().Character[_G.AimPart].Position)}):Play()
-    end
-end)
-   end,
-})
-
-local Button = MainTab:CreateButton({
-   Name = "Infinite Jump Toggle",
-   Callback = function()
-       local infjmp = true
-game:GetService("UserInputService").jumpRequest:Connect(function()
-    if infjmp then
-        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
     end
 end)
    end,
