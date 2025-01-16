@@ -1,6 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
+local Window = Rayfield:CreateWindow({a
    Name = "Capybara Hub",
    LoadingTitle = "Capybara Hub",
    LoadingSubtitle = "by S0me1Rand0m",
@@ -10,7 +10,7 @@ local Window = Rayfield:CreateWindow({
       FileName = "Capybara Hub"
    },
    Discord = {
-      Enabled = true,
+      Enabled = false,
       Invite = "tppwjY3TAU", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
